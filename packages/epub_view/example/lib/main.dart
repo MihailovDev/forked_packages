@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _epubReaderController = EpubController(
       document:
           // EpubDocument.openAsset('assets/New-Findings-on-Shirdi-Sai-Baba.epub'),
-          EpubDocument.openAsset('assets/New-Findings-on-Shirdi-Sai-Baba.epub'),
+          EpubDocument.openAsset('assets/book_1.epub'),
       // epubCfi:
       //     'epubcfi(/6/26[id4]!/4/2/2[id4]/22)', // book.epub Chapter 3 paragraph 10
       // epubCfi:
@@ -90,6 +90,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     super.initState();
   }
+
+
 
   @override
   void dispose() {

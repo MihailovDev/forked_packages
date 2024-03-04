@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
+import '../helpers/content_measurer.dart';
+
 export 'package:epubx/epubx.dart' hide Image;
 
 part '../epub_controller.dart';
@@ -64,6 +66,8 @@ class _EpubViewState extends State<EpubView> {
   final _chapterIndexes = <int>[];
 
   EpubController get _controller => widget.controller;
+
+
 
   @override
   void initState() {
@@ -333,6 +337,7 @@ class _EpubViewState extends State<EpubView> {
 
     final defaultBuilder = builders as EpubViewBuilders<DefaultBuilderOptions>;
     final options = defaultBuilder.options;
+    measureAndPaginateContent(chapters[chapterIndex].HtmlContent ?? '', builders,document);
 
     return Column(
       children: <Widget>[
@@ -372,7 +377,7 @@ class _EpubViewState extends State<EpubView> {
 
   Widget _buildLoaded(BuildContext context) {
     return ScrollablePositionedList.builder(
-      scrollDirection: Axis.horizontal,
+      scrollDirection: Axis.vertical,
       shrinkWrap: widget.shrinkWrap,
       initialScrollIndex: _epubCfiReader!.paragraphIndexByCfiFragment ?? 0,
       itemCount: _paragraphs.length,
@@ -443,6 +448,17 @@ class _EpubViewState extends State<EpubView> {
       _controller.loadingState.value,
       _buildLoaded,
       _loadingError,
+    );
+  }
+
+  static void measureAndPaginateContent(String s, EpubViewBuilders<DefaultBuilderOptions> builders, EpubBook document) {
+    HtmlContentMeasurer(
+      htmlContent: s,
+      onMeasured: (Size size) {
+        // Use 'size' to adjust how the content is segmented and paginated
+        // This might involve setting state with new pagination data
+        print("Measured size: $size");
+      }, builders: builders,document: document,
     );
   }
 }
